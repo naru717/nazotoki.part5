@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>とせいくんの謎解き 第５弾</title>
+<style>
+  :root{
+    --bg:#fff7fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
+    --accent:#ff7ac6; --ok:#16a34a; --ng:#ef4444; --ring:#ffd5ec;
+    --gold:#ffcc66; --spark:#fff2a8;
+  }
+  html,body{height:100%}
+  body{
+    margin:0; background:linear-gradient(180deg,#fff7fb 0%, #f5fbff 100%);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,Arial,sans-serif;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:20px 16px 64px;}
+  header{display:flex; align-items:center; gap:12px; margin:6px 0 10px;}
+  header h1{font-size:26px; margin:0;}
+  .mascot{width:40px; height:40px; border-radius:12px; box-shadow:0 6px 16px rgba(0,0,0,.08);}
+  .card{background:var(--card); border-radius:20px; box-shadow:0 10px 24px rgba(255,122,198,.15);
+        padding:18px; margin:14px 0; border:2px solid var(--ring);}
+  .question{font-size:20px; font-weight:800; margin:8px 0 4px;}
+  .lead{color:var(--muted); margin-top:2px;}
+  .choices{display:grid; gap:10px; margin-top:12px;}
+  .choice-btn{width:100%; text-align:left; padding:14px 16px; border-radius:16px; border:2px solid #e7f2ff; background:#fff; cursor:pointer; font-size:16px;}
+  .choice-btn:hover{border-color:#cfe7ff; background:#f7fbff;}
+  .result{margin-top:10px; font-weight:900; font-size:18px;}
+  .ok{color:var(--ok);} .ng{color:var(--ng);}
+  .subtitle{font-weight:900; color:#1f2937; margin:6px 0 10px; font-size:18px;}
+  .muted-box{background:#fff5fa; border:2px dashed #ffd2ea; padding:10px 12px; border-radius:14px; color:#374151;}
+  .explain{margin-top:12px; text-align:left; background:#f7fbff; border:2px solid #dbeafe; border-radius:14px; padding:12px;}
+  .fade{animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+  @media (max-width:560px){
+    header h1{font-size:22px}
+    .question{font-size:18px}
+    .choice-btn{font-size:15px; padding:14px}
+    .btn{width:100%}
+  }
+
+  .btn{
+    display:inline-block; padding:14px 18px; border-radius:16px; border:none; cursor:pointer; font-size:16px;
+    background:linear-gradient(90deg,var(--accent),#ffa7d8); color:#fff; box-shadow:0 8px 18px rgba(255,122,198,.35);
+  }
+  .btn:disabled{opacity:.6; cursor:not-allowed;}
+  .btn.alt{background:linear-gradient(90deg,#8ec5ff,#b5e1ff);}
+  .btn.ghost{ background:#fff; color:#ff4fae; border:2px solid #ffb4df; box-shadow:none; }
+
+  .form-vertical{display:flex; flex-direction:column; gap:12px;}
+  label{font-size:14px; color:#6b7280; margin-bottom:6px;}
+  input{
+    width:100%; padding:14px 14px; font-size:16px; border-radius:14px; border:2px solid #ffdff0; background:#fff; outline:none;
+  }
+  input:focus{border-color:#ffb3dc; box-shadow:0 0 0 4px #ffe6f4;}
+
+  .hero{
+    display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px;
+  }
+  .hero img{ width:min(68vw, 300px); height:auto; border-radius:24px; box-shadow:0 10px 26px rgba(0,0,0,.12); }
+
+  .speech{
+    background:#ffffff; border:2px solid #ffd5ec; border-radius:18px; padding:12px 14px; line-height:1.7;
+    position:relative; max-width:680px;
+  }
+  .speech:after{content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    border:10px solid transparent; border-top-color:#ffd5ec;}
+  .speech:before{content:""; position:absolute; top:calc(100% + 2px); left:50%; transform:translateX(-50%);
+    border:10px solid transparent; border-top-color:#ffffff;}
+
+  .type-line{min-height:1.8em; white-space:pre-wrap; line-height:1.9;}
+  .pause-dot{animation:blink 1.4s ease-in-out infinite;}
+  @keyframes blink{0%,100%{opacity:.2} 50%{opacity:1}}
+
+  .stamp{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(255,255,255,.75); z-index:50;}
+  .stamp img{width:min(70vw,380px); height:auto; filter:drop-shadow(0 10px 24px rgba(0,0,0,.2)); animation:pop .5s ease;}
+  @keyframes pop{0%{transform:scale(.6) rotate(-6deg); opacity:0}60%{transform:scale(1.05) rotate(2deg); opacity:1}100%{transform:scale(1) rotate(0)}}
+
+  /* チーム一覧装飾 */
+  .ending-wrap{ display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; }
+  .ending-title{
+    font-size:24px; font-weight:900; letter-spacing:.02em;
+    background:linear-gradient(90deg,#ff7ac6,#ffcc66); -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .ending-lines{
+    line-height:1.9; font-size:16px; color:#374151;
+    background:#fffef3; border:2px solid #ffefb6; border-radius:16px; padding:10px 14px;
+  }
+  .ending-badge{
+    display:inline-block; padding:8px 12px; border-radius:999px;
+    background:linear-gradient(90deg,#ffd591,#ffe9b6); color:#6b4000; font-weight:800; font-size:13px;
+    border:1px solid #f6c66f; box-shadow:0 6px 16px rgba(255,204,102,.35);
+  }
+  .ending-img{
+    width:min(60vw, 180px);
+    height:auto;
+    border-radius:24px;
+    box-shadow:0 10px 26px rgba(0,0,0,.12);
+  }
+
+  /* トースト */
+  .toast{
+    position:fixed; left:50%; bottom:20px; transform:translateX(-50%);
+    background:#111; color:#fff; padding:10px 14px; border-radius:12px;
+    opacity:.95; z-index:9999; box-shadow:0 6px 18px rgba(0,0,0,.25);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="mame2.png" alt="とせいくん（第5弾）" class="mascot" />
+      <h1>とせいくんの謎解き 第５弾</h1>
+    </header>
+
+    <!-- 1ページ目：プロフィール入力 -->
+    <section id="p1-intro" class="card fade">
+      <div class="hero">
+        <img src="mame2.png" alt="とせいくん（第5弾）" />
+        <div class="speech">
+          <strong>ぼくは とせいくん。</strong><br>
+          <strong>第５弾</strong>へようこそ！ まずは<strong>君のこと教えて</strong>ね。
+        </div>
+      </div>
+
+      <div style="height:8px;"></div>
+
+      <div class="form-vertical">
+        <div>
+          <label for="name">名前</label>
+          <input id="name" type="text" placeholder="例）フルネーム" />
+        </div>
+        <div>
+          <label for="group">所属</label>
+          <input id="group" type="text" placeholder="例）外来／〇〇病棟／リハ など" />
+        </div>
+        <div>
+          <label for="job">職種</label>
+          <input id="job" type="text" placeholder="例）看護師／医師／薬剤師 など" />
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <button class="btn" onclick="goP2()">次へ</button>
+      </div>
+    </section>
+
+    <!-- 2ページ目：全チーム表示（第4弾最終ページ風） -->
+    <section id="p2-teams" class="card fade" style="display:none;">
+      <div class="hero">
+        <img src="toseikirakira.png" alt="キラキラとせいくん" />
+        <div class="speech">
+          <div class="type-line"><strong>今日はキミの推しチームを教えて欲しいんだ。</strong></div>
+          <div class="type-line" style="margin-top:6px;">それぞれのチームの<strong>意気込みは第４弾で紹介</strong>しているから、みてみてね。</div>
+        </div>
+      </div>
+
+      <div class="ending-lines" style="margin-top:12px;">
+        <div class="ending-badge">TMC出場チーム一覧</div>
+        <ul id="team-list-view" style="text-align:left; margin:8px 0 0; padding-left:18px;"></ul>
+      </div>
+
+      <div style="margin-top:14px; text-align:center;">
+        <button class="btn" onclick="goP3()">次へ</button>
+      </div>
+    </section>
+
+    <!-- 3ページ目：謎解き 導入＋Q1 -->
+    <section id="p3-quiz1" class="card fade" style="display:none;">
+      <div class="hero">
+        <img src="mame2.png" alt="とせいくん" />
+        <div class="speech">
+          <div class="type-line">まずはTMCにも日常の看護の現場でも役立つ謎解きだ。</div>
+          <div class="type-line" style="margin-top:6px;">
+            テーマ：<strong>医療関連感染症（バルンカテーテル管理）</strong>と<strong>褥瘡予防対策</strong><br>
+            「今回はバルンカテーテル管理と褥瘡（じょくそう）予防について考えてみよう！」
+          </div>
+          <div class="type-line" style="margin-top:6px;">
+            「今日の担当患者さんは、<strong>桜陶子さん（88歳）</strong>。<br>
+            もともとは自立して一人暮らししてたけど、<br>
+            大腿骨頸部骨折で緊急入院して、手術後に整形外科病棟で療養中なんだ。」
+          </div>
+        </div>
+      </div>
+
+      <div class="question" style="margin-top:10px;">🔍 なぞ①：バルンの位置、これでいいのかな？</div>
+      <div class="lead">術後2日目。まだ痛みが強くてリハビリが進まない陶子さん。<br>バルンカテーテルがついてるけど…どこがまちがってる？</div>
+      <div class="choices" id="q1-choices"></div>
+      <div id="q1-judge" class="result"></div>
+      <div id="q1-explain" class="explain" style="display:none;"></div>
+      <!-- 指定：正解後に nazotoki2.png（スタンプ演出は共通）→ その後 baran.png を表示 -->
+      <div id="q1-after-img" style="display:none; text-align:center; margin-top:10px;">
+        <img src="baran.png" alt="バルン正しい位置例" style="max-width:280px; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,.12);" />
+      </div>
+
+      <div id="q1-next" style="display:none; margin-top:12px; text-align:center;">
+        <button class="btn" onclick="goP4()">次へ</button>
+      </div>
+    </section>
+
+    <!-- 4ページ目：Q2 -->
+    <section id="p4-quiz2" class="card fade" style="display:none;">
+      <div class="hero">
+        <img src="barun2.png" alt="高機能マットレス" />
+      </div>
+      <div class="question">なぞ②：高機能マットレス、設定はどうする？</div>
+      <div class="lead">陶子さんは体を動かすのがむずかしいから、高機能マットレスを使用中。<br>どれがまちがってるかな？</div>
+      <div class="choices" id="q2-choices"></div>
+      <div id="q2-judge" class="result"></div>
+      <div id="q2-explain" class="explain" style="display:none;"></div>
+      <div id="q2-next" style="display:none; margin-top:12px; text-align:center;">
+        <button class="btn" onclick="goP5()">次へ</button>
+      </div>
+    </section>
+
+    <!-- 5ページ目：Q3 -->
+    <section id="p5-quiz3" class="card fade" style="display:none;">
+      <div class="hero">
+        <img src="barun3.png" alt="ADL評価" />
+      </div>
+      <div class="question">なぞ③：ADLの評価、どっちを見る？</div>
+      <div class="lead">入院前は歩けてた陶子さん。でも今は介助で車椅子移乗、ほぼベッド上で過ごしてるみたい。<br>どれがまちがってる？</div>
+      <div class="choices" id="q3-choices"></div>
+      <div id="q3-judge" class="result"></div>
+      <div id="q3-explain" class="explain" style="display:none;"></div>
+      <div id="q3-next" style="display:none; margin-top:12px; text-align:center;">
+        <button class="btn" onclick="goP6()">次へ</button>
+      </div>
+    </section>
+
+    <!-- 6ページ目：Q4 -->
+    <section id="p6-quiz4" class="card fade" style="display:none;">
+      <div class="hero">
+        <img src="barun4.png" alt="車椅子移乗時の注意" />
+      </div>
+      <div class="question">なぞ④：車椅子移乗のときの注意！</div>
+      <div class="lead">リハビリで車椅子に移る陶子さん。どれがまちがってる？</div>
+      <div class="choices" id="q4-choices"></div>
+      <div id="q4-judge" class="result"></div>
+      <div id="q4-explain" class="explain" style="display:none;"></div>
+      <div id="q4-next" style="display:none; margin-top:12px; text-align:center;">
+        <button class="btn" onclick="goP7()">次へ</button>
+      </div>
+    </section>
+
+    <!-- 7ページ目：まとめ -->
+    <section id="p7-summary" class="card fade" style="display:none;">
+      <div class="hero">
+        <img src="nazotoki2.png" alt="まとめとせいくん" />
+        <div class="speech">
+          <div class="type-line"><strong>とせいくんのまとめ</strong></div>
+          <div class="type-line" style="margin-top:6px;">
+            ・バルンバッグは<strong>低く、でも床にはつけない！</strong><br>
+            ・マットレスは<strong>圧切り替え型</strong>で設定チェック！<br>
+            ・ADLは<strong>“今の状態”</strong>で評価！<br>
+            ・採尿袋は<strong>空にして逆流防止！</strong><br>
+            ・定期的な除圧＆皮膚観察で<strong>褥瘡・MDRPU</strong>を防ごう！
+          </div>
+          <div class="type-line" style="margin-top:6px;">
+            「ふぅ〜今日のなぞときもなかなか深かったね！<br>
+            小さな“気づき”が患者さんを守る大きな力になるんだよ。<br>
+            次のなぞも一緒に解いていこうね♪」
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px; text-align:center;">
+        <button class="btn" onclick="goP8()">次へ</button>
+      </div>
+    </section>
+
+    <!-- 8ページ目：推しチーム投票 -->
+    <section id="p8-vote" class="card fade" style="display:none;">
+      <div class="hero">
+        <img src="mame2.png" alt="投票とせいくん" />
+        <div class="speech">
+          <div class="type-line"><strong>じゃあ、お待ちかね！推しチームの投票だ！</strong></div>
+          <div class="type-line" style="margin-top:6px;">
+            「１つ注意！くれぐれも<strong>同じアカウントで何度も投票はしないでね。</strong><br>
+            名前を変えてもとせいくんにはお見通しだよ。<br>
+            減点しちゃうから<strong>一人一回の投票</strong>にしてね。」
+          </div>
+        </div>
+      </div>
+
+      <div class="form-vertical" style="margin-top:10px;">
+        <div>
+          <label>推しチームを選択</label>
+          <div id="vote-options" style="display:grid; gap:10px;"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px; text-align:center;">
+        <button class="btn alt" onclick="submitVote()">決定（フォーム送信）</button>
+        <button class="btn" style="margin-left:8px;" onclick="goP9()">次へ</button>
+      </div>
+    </section>
+
+    <!-- 9ページ目：ラストメッセージ -->
+    <section id="p9-last" class="card fade" style="display:none;">
+      <div class="hero">
+        <img src="nazotoki2.png" alt="ラスト" class="ending-img" />
+        <div class="speech">
+          <div class="type-line"><strong>TMCの紹介</strong></div>
+          <div class="type-line" style="margin-top:6px;">
+            ついに<strong>12月20日 TMC開催</strong>だ！！<br>
+            みんなしっかり応援してね。<br>
+            そして参加する人たち・サポートしてくれる人たち、応援してるよ！！<br>
+            <strong>頑張ってね。</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- スタンプ -->
+  <div id="stamp" class="stamp" aria-hidden="true">
+    <img src="nazotoki2.png" alt="正解スタンプ" />
+  </div>
+
+  <!-- 音源 -->
+  <audio id="bgmTeams" src="hajimari.mp3" preload="none" loop></audio>
+  <audio id="bgmQuiz" src="nazotoki.mp3" preload="none" loop></audio>
+  <audio id="seClick" src="pochi.mp3" preload="auto"></audio>
+  <audio id="seSuccess" src="seikou.mp3" preload="auto"></audio>
+  <audio id="seCorrect" src="pinpon.mp3" preload="auto"></audio>
+
+<script>
+/* ====== Googleフォーム 送信設定（あなたの値に差し替えて使用） ======
+   第4弾と同じ「名前/所属/職種」エントリIDを流用。投票用のENTRY_VOTEだけ置き換えてください。 */
+const GOOGLE_FORM_ACTION = "";
+const ENTRY_NAME = "entry."; // 名前
+const ENTRY_DEPT = "entry."; // 所属
+const ENTRY_JOB  = "entry."; // 職種
+const ENTRY_VOTE = "entry."; // ★投票（あなたのフォームの項目IDに置き換えてください）
+
+/* ====== DOM参照 ====== */
+const nameEl  = document.getElementById('name');
+const groupEl = document.getElementById('group');
+const jobEl   = document.getElementById('job');
+
+const p1 = document.getElementById('p1-intro');
+const p2 = document.getElementById('p2-teams');
+const p3 = document.getElementById('p3-quiz1');
+const p4 = document.getElementById('p4-quiz2');
+const p5 = document.getElementById('p5-quiz3');
+const p6 = document.getElementById('p6-quiz4');
+const p7 = document.getElementById('p7-summary');
+const p8 = document.getElementById('p8-vote');
+const p9 = document.getElementById('p9-last');
+
+function hideAll(){ [p1,p2,p3,p4,p5,p6,p7,p8,p9].forEach(e=>e.style.display='none'); }
+function show(el){ hideAll(); el.style.display='block'; window.scrollTo({top:0,behavior:'smooth'}); }
+show(p1);
+
+/* ====== サウンド ====== */
+const bgmTeams = document.getElementById('bgmTeams');   // 2, 8ページで使用
+const bgmQuiz  = document.getElementById('bgmQuiz');    // 3〜7ページで使用
+const seClick  = document.getElementById('seClick');
+const seSuccess= document.getElementById('seSuccess');
+const seCorrect= document.getElementById('seCorrect');
+
+document.addEventListener('click', e=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  try{ seClick.currentTime = 0; seClick.play(); }catch(e){}
+}, true);
+
+/* ====== 共通：トースト ====== */
+function toast(msg){
+  const t=document.createElement('div');
+  t.className="toast"; t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 1800);
+}
+
+/* ====== Googleフォーム送信 ====== */
+function sendProfile(){ // 1ページ目送信（任意：必要ならコメントアウト解除で自動送信）
+  const params = new URLSearchParams();
+  params.append(ENTRY_NAME, nameEl.value ?? "");
+  params.append(ENTRY_DEPT, groupEl.value ?? "");
+  params.append(ENTRY_JOB,  jobEl.value ?? "");
+  params.append("submit", "Submit");
+  fetch(GOOGLE_FORM_ACTION, {
+    method: "POST", mode: "no-cors",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params
+  }).catch(()=>{});
+}
+
+/* ====== チーム一覧 ====== */
+const teams = [
+  "師長会隈",
+  "SiziU",
+  "Team BONE",
+  "ケモメイトレンジャーズ",
+  "陶生勝手に盛り上げ隊",
+  "外科の一味",
+  "パワフルチーム",
+  "ひげ男爵"
+];
+(function renderTeamList(){
+  const ul = document.getElementById('team-list-view');
+  teams.forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = t;
+    ul.appendChild(li);
+  });
+  const voteBox = document.getElementById('vote-options');
+  teams.forEach((t,i)=>{
+    const id = "vote-"+i;
+    const row = document.createElement('label');
+    row.style.display = "flex"; row.style.alignItems="center"; row.style.gap="10px";
+    row.style.border="2px solid #ffe0f2"; row.style.borderRadius="12px"; row.style.padding="10px 12px"; row.style.background="#fff";
+    row.innerHTML = `<input type="radio" name="voteTeam" value="${t}" id="${id}" /> <span>${t}</span>`;
+    voteBox.appendChild(row);
+  });
+})();
+
+/* ====== 画面遷移 ====== */
+function goP2(){
+  if(!nameEl.value.trim()){ nameEl.focus(); nameEl.style.borderColor='#ff8dc7'; return; }
+  if(!groupEl.value.trim()){ groupEl.focus(); groupEl.style.borderColor='#ff8dc7'; return; }
+  if(!jobEl.value.trim()){ jobEl.focus(); jobEl.style.borderColor='#ff8dc7'; return; }
+  nameEl.style.borderColor=groupEl.style.borderColor=jobEl.style.borderColor='#ffdff0';
+
+  // プロフィール送信（必要な場合ON）
+  sendProfile();
+  toast("プロフィールをフォームに送信しました（回答タブでご確認ください）");
+
+  try{ bgmQuiz.pause(); }catch(e){}
+  try{ bgmTeams.volume=0.85; bgmTeams.play(); }catch(e){}
+  show(p2);
+}
+function goP3(){
+  try{ bgmTeams.pause(); }catch(e){}
+  try{ bgmQuiz.volume=0.85; bgmQuiz.play(); }catch(e){}
+  show(p3);
+}
+function goP4(){ show(p4); }
+function goP5(){ show(p5); }
+function goP6(){ show(p6); }
+function goP7(){
+  try{ seSuccess.currentTime=0; seSuccess.play(); }catch(e){}
+  show(p7);
+}
+function goP8(){
+  try{ bgmQuiz.pause(); }catch(e){}
+  try{ bgmTeams.volume=0.85; bgmTeams.play(); }catch(e){}
+  show(p8);
+}
+function goP9(){
+  try{ bgmTeams.pause(); }catch(e){}
+  show(p9);
+}
+
+/* ====== スタンプ演出 ====== */
+function showStamp(){
+  const s=document.getElementById('stamp');
+  s.style.display='flex';
+  setTimeout(()=>s.style.display='none',700);
+}
+
+/* ====== クイズ：Q1 ====== */
+(function initQ1(){
+  const box = document.getElementById('q1-choices');
+  const opts = [
+    {label:"1）お腹にΩ貼りで固定されている", correct:false},
+    {label:"2）ベッドを低くしているため採尿バッグが床についている", correct:true},
+    {label:"3）感染リスクがあるから早めに抜去を目指している", correct:false}
+  ];
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='choice-btn';
+    b.textContent=o.label;
+    b.onclick=()=>{
+      const judge = document.getElementById('q1-judge');
+      const explain= document.getElementById('q1-explain');
+      const next   = document.getElementById('q1-next');
+      const afterImg = document.getElementById('q1-after-img');
+      if(o.correct){
+        judge.textContent="正解！"; judge.className="result ok";
+        try{ seCorrect.currentTime=0; seCorrect.play(); }catch(e){}
+        showStamp(); // nazotoki2.png でポップ
+        explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>バッグが床についてると汚れちゃって、感染のリスクが上がるんだよ。</li><li>膀胱より低くて、でも床にはつかない位置に固定しようね。</li><li>チューブが柵にかからないようにも注意だよ！</li></ul>";
+        explain.style.display="block";
+        next.style.display="block";
+        setTimeout(()=>{ afterImg.style.display="block"; }, 750); // スタンプ後にbaran.png
+      }else{
+        judge.textContent="残念！もう一度選んでみよう。"; judge.className="result ng";
+      }
+    };
+    box.appendChild(b);
+  });
+})();
+
+/* ====== クイズ：Q2 ====== */
+(function initQ2(){
+  const box = document.getElementById('q2-choices');
+  const opts = [
+    {label:"1）静止型に設定している", correct:true},
+    {label:"2）作動や設定内容を訪室時に確認している", correct:false},
+    {label:"3）OHスケールをもとに褥瘡対策を再評価している", correct:false}
+  ];
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='choice-btn';
+    b.textContent=o.label;
+    b.onclick=()=>{
+      const judge = document.getElementById('q2-judge');
+      const explain= document.getElementById('q2-explain');
+      const next   = document.getElementById('q2-next');
+      if(o.correct){
+        judge.textContent="正解！"; judge.className="result ok";
+        try{ seCorrect.currentTime=0; seCorrect.play(); }catch(e){}
+        showStamp();
+        explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>静止型だと除圧が足りなくて、褥瘡のリスクが上がっちゃう。</li><li>基本は<strong>圧切り替え型（交互圧）</strong>を使おう！</li><li>訪室時に“ちゃんと動いてる？”って確認するのも大事！</li></ul>";
+        explain.style.display="block";
+        next.style.display="block";
+      }else{
+        judge.textContent="残念！もう一度選んでみよう。"; judge.className="result ng";
+      }
+    };
+    box.appendChild(b);
+  });
+})();
+
+/* ====== クイズ：Q3 ====== */
+(function initQ3(){
+  const box = document.getElementById('q3-choices');
+  const opts = [
+    {label:"1）入院前が自立だったからJ1", correct:true},
+    {label:"2）ストッキングを脱いで皮膚観察", correct:false},
+    {label:"3）リジャストグローブで除圧", correct:false},
+    {label:"4）ハイリスク加算対象として褥瘡計画書作成", correct:false}
+  ];
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='choice-btn';
+    b.textContent=o.label;
+    b.onclick=()=>{
+      const judge = document.getElementById('q3-judge');
+      const explain= document.getElementById('q3-explain');
+      const next   = document.getElementById('q3-next');
+      if(o.correct){
+        judge.textContent="正解！"; judge.className="result ok";
+        try{ seCorrect.currentTime=0; seCorrect.play(); }catch(e){}
+        showStamp();
+        explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>ADLは<strong>“いまの状態”</strong>で評価するんだよ！</li><li>今の陶子さんは介助が必要だから<strong>B2くらい</strong>。</li><li>自力で除圧できないなら、定期的に体位変換や摩擦予防をしよう。</li><li>ストッキング中も赤みやしわのチェック忘れずに！</li></ul>";
+        explain.style.display="block";
+        next.style.display="block";
+      }else{
+        judge.textContent="残念！もう一度選んでみよう。"; judge.className="result ng";
+      }
+    };
+    box.appendChild(b);
+  });
+})();
+
+/* ====== クイズ：Q4 ====== */
+(function initQ4(){
+  const box = document.getElementById('q4-choices');
+  const opts = [
+    {label:"1）採尿袋を空にしてから移乗した", correct:false},
+    {label:"2）採尿袋を膝の上に置いた", correct:true},
+    {label:"3）クッションで体圧分散した", correct:false},
+    {label:"4）定期的にプッシュアップで除圧した", correct:false}
+  ];
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='choice-btn';
+    b.textContent=o.label;
+    b.onclick=()=>{
+      const judge = document.getElementById('q4-judge');
+      const explain= document.getElementById('q4-explain');
+      const next   = document.getElementById('q4-next');
+      if(o.correct){
+        judge.textContent="正解！"; judge.className="result ok";
+        try{ seCorrect.currentTime=0; seCorrect.play(); }catch(e){}
+        showStamp();
+        explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>採尿袋を膝に置くと膀胱より高くなって<strong>逆流の危険！</strong></li><li>移乗前に中身を空にして、膀胱より低い位置でキープしよう。</li><li>クッションと除圧で褥瘡も予防できるよ！</li></ul>";
+        explain.style.display="block";
+        next.style.display="block";
+      }else{
+        judge.textContent="残念！もう一度選んでみよう。"; judge.className="result ng";
+      }
+    };
+    box.appendChild(b);
+  });
+})();
+
+/* ====== 投票送信 ====== */
+function submitVote(){
+  const selected = document.querySelector('input[name="voteTeam"]:checked');
+  if(!selected){ toast("推しチームを選んでね"); return; }
+
+  const params = new URLSearchParams();
+  // プロフィールも一緒に送る（集計しやすいように）
+  params.append(ENTRY_NAME, nameEl.value ?? "");
+  params.append(ENTRY_DEPT, groupEl.value ?? "");
+  params.append(ENTRY_JOB,  jobEl.value ?? "");
+  // 投票
+  params.append(ENTRY_VOTE, selected.value);
+  params.append("submit", "Submit");
+
+  fetch(GOOGLE_FORM_ACTION, {
+    method: "POST", mode: "no-cors",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params
+  }).then(()=>{
+    toast("投票をフォームに送信しました（回答タブでご確認ください）");
+  }).catch(()=>{
+    toast("送信エラー：通信環境をご確認ください");
+  });
+}
+</script>
+</body>
+</html>
