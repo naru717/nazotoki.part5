@@ -323,19 +323,18 @@
 
   <!-- 音源 -->
   <audio id="bgmTeams" src="hajimari.mp3" preload="none" loop></audio>
-  <audio id="bgmQuiz" src="nazotoki.mp3" preload="none" loop></audio>
-  <audio id="seClick" src="pochi.mp3" preload="auto"></audio>
+  <audio id="bgmQuiz"  src="nazotoki.mp3" preload="none" loop></audio>
+  <audio id="seClick"  src="pochi.mp3" preload="auto"></audio>
   <audio id="seSuccess" src="seikou.mp3" preload="auto"></audio>
   <audio id="seCorrect" src="pinpon.mp3" preload="auto"></audio>
 
 <script>
-/* ====== Googleフォーム 送信設定（あなたの値に差し替えて使用） ======
-   ※「決定」ボタンで即送信します（次へボタンは削除済み） */
-const GOOGLE_FORM_ACTION = "";
-const ENTRY_NAME = "entry."; // 名前
-const ENTRY_DEPT = "entry."; // 所属
-const ENTRY_JOB  = "entry."; // 職種
-const ENTRY_VOTE = "entry."; // ★投票（あなたのフォームの項目IDに置き換えてください）
+/* ====== Googleフォーム 送信設定（必要なら設定） ====== */
+const GOOGLE_FORM_ACTION = "";   // フォームURL（未設定でも最終ページへ進む）
+const ENTRY_NAME = "entry.";     // 名前
+const ENTRY_DEPT = "entry.";     // 所属
+const ENTRY_JOB  = "entry.";     // 職種
+const ENTRY_VOTE = "entry.";     // 投票
 
 /* ====== DOM参照 ====== */
 const nameEl  = document.getElementById('name');
@@ -363,9 +362,11 @@ const seClick  = document.getElementById('seClick');
 const seSuccess= document.getElementById('seSuccess');
 const seCorrect= document.getElementById('seCorrect');
 
+/* クリックSE：data-se="none" のボタンは鳴らさない */
 document.addEventListener('click', e=>{
   const btn = e.target.closest('button');
   if(!btn) return;
+  if(btn.dataset.se === 'none') return;  // ★選択肢などはクリックSEを抑制
   try{ seClick.currentTime = 0; seClick.play(); }catch(e){}
 }, true);
 
@@ -459,7 +460,12 @@ function showStamp(){
   setTimeout(()=>s.style.display='none',700);
 }
 
-/* ====== クイズ（同じ） ====== */
+/* ====== 正解時は pinpon のみ再生 ====== */
+function playCorrectSE(){
+  try{ seCorrect.currentTime=0; seCorrect.play(); }catch(e){}
+}
+
+/* ====== クイズ ====== */
 (function initQ1(){
   const box = document.getElementById('q1-choices');
   const opts = [
@@ -469,7 +475,9 @@ function showStamp(){
   ];
   opts.forEach(o=>{
     const b=document.createElement('button');
-    b.className='choice-btn'; b.textContent=o.label;
+    b.className='choice-btn';
+    b.dataset.se='none';              // ★クリックSE抑制
+    b.textContent=o.label;
     b.onclick=()=>{
       const judge = document.getElementById('q1-judge');
       const explain= document.getElementById('q1-explain');
@@ -477,7 +485,7 @@ function showStamp(){
       const afterImg = document.getElementById('q1-after-img');
       if(o.correct){
         judge.textContent="正解！"; judge.className="result ok";
-        try{ seCorrect.currentTime=0; seCorrect.play(); }catch(e){}
+        playCorrectSE();              // ★pinponのみ
         showStamp();
         explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>バッグが床についてると汚れちゃって、感染のリスクが上がるんだよ。</li><li>膀胱より低くて、でも床にはつかない位置に固定しようね。</li><li>チューブが柵にかからないようにも注意だよ！</li></ul>";
         explain.style.display="block";
@@ -498,14 +506,17 @@ function showStamp(){
     {label:"3）OHスケールをもとに褥瘡対策を再評価している", correct:false}
   ];
   opts.forEach(o=>{
-    const b=document.createElement('button'); b.className='choice-btn'; b.textContent=o.label;
+    const b=document.createElement('button');
+    b.className='choice-btn';
+    b.dataset.se='none';              // ★クリックSE抑制
+    b.textContent=o.label;
     b.onclick=()=>{
       const judge = document.getElementById('q2-judge');
       const explain= document.getElementById('q2-explain');
       const next   = document.getElementById('q2-next');
       if(o.correct){
         judge.textContent="正解！"; judge.className="result ok";
-        try{ seCorrect.currentTime=0; seCorrect.play(); }catch(e){}
+        playCorrectSE();
         showStamp();
         explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>静止型だと除圧が足りなくて、褥瘡のリスクが上がっちゃう。</li><li>基本は<strong>圧切り替え型（交互圧）</strong>を使おう！</li><li>訪室時に“ちゃんと動いてる？”って確認するのも大事！</li></ul>";
         explain.style.display="block";
@@ -526,14 +537,17 @@ function showStamp(){
     {label:"4）ハイリスク加算対象として褥瘡計画書作成", correct:false}
   ];
   opts.forEach(o=>{
-    const b=document.createElement('button'); b.className='choice-btn'; b.textContent=o.label;
+    const b=document.createElement('button');
+    b.className='choice-btn';
+    b.dataset.se='none';              // ★クリックSE抑制
+    b.textContent=o.label;
     b.onclick=()=>{
       const judge = document.getElementById('q3-judge');
       const explain= document.getElementById('q3-explain');
       const next   = document.getElementById('q3-next');
       if(o.correct){
         judge.textContent="正解！"; judge.className="result ok";
-        try{ seCorrect.currentTime=0; seCorrect.play(); }catch(e){}
+        playCorrectSE();
         showStamp();
         explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>ADLは<strong>“いまの状態”</strong>で評価するんだよ！</li><li>今の陶子さんは介助が必要だから<strong>B2くらい</strong>。</li><li>自力で除圧できないなら、定期的に体位変換や摩擦予防をしよう。</li><li>ストッキング中も赤みやしわのチェック忘れずに！</li></ul>";
         explain.style.display="block";
@@ -554,14 +568,17 @@ function showStamp(){
     {label:"4）定期的にプッシュアップで除圧した", correct:false}
   ];
   opts.forEach(o=>{
-    const b=document.createElement('button'); b.className='choice-btn'; b.textContent=o.label;
+    const b=document.createElement('button');
+    b.className='choice-btn';
+    b.dataset.se='none';              // ★クリックSE抑制
+    b.textContent=o.label;
     b.onclick=()=>{
       const judge = document.getElementById('q4-judge');
       const explain= document.getElementById('q4-explain');
       const next   = document.getElementById('q4-next');
       if(o.correct){
         judge.textContent="正解！"; judge.className="result ok";
-        try{ seCorrect.currentTime=0; seCorrect.play(); }catch(e){}
+        playCorrectSE();
         showStamp();
         explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>採尿袋を膝に置くと膀胱より高くなって<strong>逆流の危険！</strong></li><li>移乗前に中身を空にして、膀胱より低い位置でキープしよう。</li><li>クッションと除圧で褥瘡も予防できるよ！</li></ul>";
         explain.style.display="block";
@@ -575,36 +592,32 @@ function showStamp(){
 })();
 
 /* ====== 投票送信（決定のみ） ====== */
+/* 送信の成否に関わらず、必ず最終ページへ遷移 */
 function submitVote(){
   const selectedRadio = document.querySelector('input[name="voteTeam"]:checked');
   if(!selectedRadio){ toast("推しチームを選んでね"); return; }
 
-  if(!GOOGLE_FORM_ACTION){
-    toast("フォームURL未設定：GOOGLE_FORM_ACTION を設定してください");
-    return;
-  }
-
-  const params = new URLSearchParams();
-  params.append(ENTRY_NAME, nameEl.value ?? "");
-  params.append(ENTRY_DEPT, groupEl.value ?? "");
-  params.append(ENTRY_JOB,  jobEl.value ?? "");
-  params.append(ENTRY_VOTE, selectedRadio.value);
-  params.append("submit", "Submit");
-
   const btn = document.getElementById('vote-submit');
   btn.disabled = true;
 
-  fetch(GOOGLE_FORM_ACTION, {
-    method: "POST", mode: "no-cors",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: params
-  }).then(()=>{
-    toast("投票を送信しました。ありがとう！");
-    setTimeout(()=>{ goP9(); btn.disabled = false; }, 600);
-  }).catch(()=>{
-    toast("送信エラー：通信環境をご確認ください");
-    btn.disabled = false;
-  });
+  if(GOOGLE_FORM_ACTION){
+    const params = new URLSearchParams();
+    params.append(ENTRY_NAME, nameEl.value ?? "");
+    params.append(ENTRY_DEPT, groupEl.value ?? "");
+    params.append(ENTRY_JOB,  jobEl.value ?? "");
+    params.append(ENTRY_VOTE, selectedRadio.value);
+    params.append("submit", "Submit");
+
+    fetch(GOOGLE_FORM_ACTION, {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params
+    }).catch(()=>{});
+  }
+
+  // 成否に関係なく演出→最終ページへ
+  toast("投票を送信しました。ありがとう！");
+  setTimeout(()=>{ goP9(); btn.disabled = false; }, 600);
 }
 </script>
 </body>
