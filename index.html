@@ -8,7 +8,7 @@
   :root{
     --bg:#fff7fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
     --accent:#ff7ac6; --ok:#16a34a; --ng:#ef4444; --ring:#ffd5ec;
-    --gold:#ffcc66; --spark:#fff2a8; --focus:#ffb3dc;
+    --gold:#ffcc66; --spark:#fff2a8; --focus:#ffb3dc; --warn:#ff006e;
   }
   html,body{height:100%}
   body{
@@ -16,56 +16,67 @@
     color:var(--text);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,Arial,sans-serif;
     -webkit-tap-highlight-color:transparent;
+    line-height:1.85;
+    font-size:17px;
   }
-  .wrap{max-width:900px; margin:0 auto; padding:20px 16px 80px;}
-  header{display:flex; align-items:center; gap:12px; margin:6px 0 10px;}
-  header h1{font-size:26px; margin:0;}
-  .mascot{width:40px; height:40px; border-radius:12px; box-shadow:0 6px 16px rgba(0,0,0,.08);}
-  .card{background:var(--card); border-radius:20px; box-shadow:0 10px 24px rgba(255,122,198,.15);
-        padding:18px; margin:14px 0; border:2px solid var(--ring);}
-  .question{font-size:20px; font-weight:800; margin:8px 0 4px;}
-  .lead{color:var(--muted); margin-top:2px;}
-  .choices{display:grid; gap:10px; margin-top:12px;}
-  .choice-btn{width:100%; text-align:left; padding:14px 16px; border-radius:16px; border:2px solid #e7f2ff; background:#fff; cursor:pointer; font-size:16px;}
+  .wrap{max-width:920px; margin:0 auto; padding:18px clamp(12px,4vw,24px) 96px;}
+  header{display:flex; align-items:center; gap:12px; margin:8px 0 12px;}
+  header h1{font-size:28px; margin:0; letter-spacing:.02em;}
+  .mascot{width:44px; height:44px; border-radius:12px; box-shadow:0 6px 16px rgba(0,0,0,.08);}
+  .card{
+    background:var(--card); border-radius:22px; box-shadow:0 10px 24px rgba(255,122,198,.15);
+    padding:clamp(14px,3.8vw,24px); margin:16px 0; border:2px solid var(--ring);
+  }
+  .question{font-size:22px; font-weight:800; margin:10px 0 6px; letter-spacing:.01em;}
+  .lead{color:var(--muted); margin-top:6px;}
+  .choices{display:grid; gap:12px; margin-top:14px;}
+  .choice-btn{
+    width:100%; text-align:left; padding:16px 18px; border-radius:18px;
+    border:2px solid #e7f2ff; background:#fff; cursor:pointer; font-size:17px; line-height:1.6;
+  }
   .choice-btn:hover{border-color:#cfe7ff; background:#f7fbff;}
-  .result{margin-top:10px; font-weight:900; font-size:18px;}
+  .choice-btn:focus{outline:none; border-color:var(--focus); box-shadow:0 0 0 4px #ffe6f4;}
+  .result{margin-top:12px; font-weight:900; font-size:19px;}
   .ok{color:var(--ok);} .ng{color:var(--ng);}
-  .subtitle{font-weight:900; color:#1f2937; margin:6px 0 10px; font-size:18px;}
-  .muted-box{background:#fff5fa; border:2px dashed #ffd2ea; padding:10px 12px; border-radius:14px; color:#374151;}
-  .explain{margin-top:12px; text-align:left; background:#f7fbff; border:2px solid #dbeafe; border-radius:14px; padding:12px;}
+  .subtitle{font-weight:900; color:#1f2937; margin:8px 0 12px; font-size:19px;}
+  .muted-box{background:#fff5fa; border:2px dashed #ffd2ea; padding:12px 14px; border-radius:16px; color:#374151;}
+  .explain{margin-top:12px; text-align:left; background:#f7fbff; border:2px solid #dbeafe; border-radius:14px; padding:12px 14px;}
   .fade{animation:fade .25s ease;}
   @keyframes fade{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+
+  /* モバイル最適化 */
   @media (max-width:560px){
     header h1{font-size:22px}
-    .question{font-size:18px}
-    .choice-btn{font-size:15px; padding:14px}
+    .question{font-size:19px}
+    .choice-btn{font-size:16px; padding:15px}
+    .wrap{padding-bottom:90px}
   }
 
   .btn{
-    display:inline-block; padding:14px 18px; border-radius:16px; border:none; cursor:pointer; font-size:16px;
+    display:inline-block; padding:15px 20px; border-radius:18px; border:none; cursor:pointer; font-size:17px;
     background:linear-gradient(90deg,var(--accent),#ffa7d8); color:#fff; box-shadow:0 8px 18px rgba(255,122,198,.35);
   }
   .btn:disabled{opacity:.6; cursor:not-allowed;}
   .btn.alt{background:linear-gradient(90deg,#8ec5ff,#b5e1ff);}
 
-  .form-vertical{display:flex; flex-direction:column; gap:12px;}
-  label{font-size:14px; color:#6b7280; margin-bottom:6px;}
+  .form-vertical{display:flex; flex-direction:column; gap:14px;}
+  label{font-size:15px; color:#6b7280; margin-bottom:6px; display:block;}
   input{
-    width:100%; padding:14px 14px; font-size:16px; border-radius:14px; border:2px solid #ffdff0; background:#fff; outline:none;
+    width:100%; padding:15px 14px; font-size:17px; border-radius:14px; border:2px solid #ffdff0; background:#fff; outline:none;
   }
   input:focus{border-color:var(--focus); box-shadow:0 0 0 4px #ffe6f4;}
 
-  .hero{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; }
-  .hero img{ width:min(68vw, 300px); height:auto; border-radius:24px; box-shadow:0 10px 26px rgba(0,0,0,.12); }
+  .hero{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; }
+  .hero img{ width:min(72vw, 320px); height:auto; border-radius:24px; box-shadow:0 10px 26px rgba(0,0,0,.12); }
 
   .speech{
-    background:#ffffff; border:2px solid #ffd5ec; border-radius:18px; padding:12px 14px; line-height:1.7;
-    position:relative; max-width:680px;
+    background:#ffffff; border:2px solid #ffd5ec; border-radius:18px; padding:12px 14px; line-height:1.9;
+    position:relative; max-width:720px; text-align:left;
   }
   .speech:after{content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:10px solid transparent; border-top-color:#ffd5ec;}
   .speech:before{content:""; position:absolute; top:calc(100% + 2px); left:50%; transform:translateX(-50%); border:10px solid transparent; border-top-color:#ffffff;}
 
-  .type-line{min-height:1.8em; white-space:pre-wrap; line-height:1.9;}
+  .type-line{min-height:1.8em; white-space:pre-wrap; line-height:2.0;}
   .pause-dot{animation:blink 1.4s ease-in-out infinite;}
   @keyframes blink{0%,100%{opacity:.2} 50%{opacity:1}}
 
@@ -73,15 +84,10 @@
   .stamp img{width:min(70vw,380px); height:auto; filter:drop-shadow(0 10px 24px rgba(0,0,0,.2)); animation:pop .5s ease;}
   @keyframes pop{0%{transform:scale(.6) rotate(-6deg); opacity:0}60%{transform:scale(1.05) rotate(2deg); opacity:1}100%{transform:scale(1) rotate(0)}}
 
-  /* ===== 投票UIを見やすく・押しやすく ===== */
+  /* 投票UI */
   .vote-wrap{margin-top:12px;}
-  .vote-grid{
-    display:grid; gap:12px;
-    grid-template-columns: 1fr;
-  }
-  @media (min-width:720px){
-    .vote-grid{ grid-template-columns: 1fr 1fr; }
-  }
+  .vote-grid{ display:grid; gap:12px; grid-template-columns: 1fr; }
+  @media (min-width:720px){ .vote-grid{ grid-template-columns: 1fr 1fr; } }
   .vote-card{
     display:flex; align-items:center; gap:12px;
     padding:14px 16px; border-radius:16px; background:#fff;
@@ -118,6 +124,16 @@
     position:fixed; left:50%; bottom:20px; transform:translateX(-50%);
     background:#111; color:#fff; padding:10px 14px; border-radius:12px;
     opacity:.95; z-index:9999; box-shadow:0 6px 18px rgba(0,0,0,.25);
+    font-size:15px;
+  }
+
+  /* 重要注意（投票ページ用） */
+  .warn{
+    border:2px solid var(--warn);
+    box-shadow:0 8px 20px rgba(255,0,110,.08);
+  }
+  .warn-title{
+    color:var(--warn); font-weight:900; font-size:18px; margin-bottom:6px;
   }
 </style>
 </head>
@@ -134,7 +150,9 @@
         <img src="mame2.png" alt="とせいくん（第5弾）" />
         <div class="speech">
           <strong>ぼくは とせいくん。</strong><br>
-          <strong>第５弾</strong>へようこそ！ まずは<strong>君のこと教えて</strong>ね。
+          <strong>第５弾</strong>へようこそ！<br>
+          まずは<strong>君のこと教えて</strong>ね。<br>
+          （名前・所属・職種を入力したら、<strong>下の「次へ」</strong>を押してね）
         </div>
       </div>
 
@@ -143,7 +161,7 @@
       <div class="form-vertical">
         <div>
           <label for="name">名前</label>
-          <input id="name" type="text" placeholder="例）フルネーム" />
+          <input id="name" type="text" placeholder="例）フルネーム" inputmode="text" autocomplete="name" />
         </div>
         <div>
           <label for="group">所属</label>
@@ -155,7 +173,7 @@
         </div>
       </div>
 
-      <div style="margin-top:16px;">
+      <div style="margin-top:18px; text-align:center;">
         <button class="btn" onclick="goP2()">次へ</button>
       </div>
     </section>
@@ -166,16 +184,19 @@
         <img src="toseikirakira.png" alt="キラキラとせいくん" />
         <div class="speech">
           <div class="type-line"><strong>今日はキミの推しチームを教えて欲しいんだ。</strong></div>
-          <div class="type-line" style="margin-top:6px;">それぞれのチームの<strong>意気込みは第４弾で紹介</strong>しているから、みてみてね。</div>
+          <div class="type-line" style="margin-top:8px;">
+            それぞれのチームの<strong>意気込みは第４弾で紹介</strong>しているから、みてみてね。<br>
+            リストを見やすく並べておくよ。
+          </div>
         </div>
       </div>
 
-      <div class="muted-box" style="margin-top:12px;">
-        <div class="ending-badge" style="display:inline-block;padding:.3rem .7rem;border-radius:9999px;background:#fff; border:1px solid #ffd5ec;">TMC出場チーム一覧</div>
-        <ul id="team-list-view" style="text-align:left; margin:8px 0 0; padding-left:18px;"></ul>
+      <div class="muted-box" style="margin-top:14px;">
+        <div class="ending-badge" style="display:inline-block;padding:.35rem .8rem;border-radius:9999px;background:#fff; border:1px solid #ffd5ec; font-size:14px;">TMC出場チーム一覧</div>
+        <ul id="team-list-view" style="text-align:left; margin:10px 0 0; padding-left:20px;"></ul>
       </div>
 
-      <div style="margin-top:14px; text-align:center;">
+      <div style="margin-top:16px; text-align:center;">
         <button class="btn" onclick="goP3()">次へ</button>
       </div>
     </section>
@@ -186,11 +207,11 @@
         <img src="mame2.png" alt="とせいくん" />
         <div class="speech">
           <div class="type-line">まずはTMCにも日常の看護の現場でも役立つ謎解きだ。</div>
-          <div class="type-line" style="margin-top:6px;">
-            テーマ：<strong>医療関連感染症（バルンカテーテル管理）</strong>と<strong>褥瘡予防対策</strong><br>
+          <div class="type-line" style="margin-top:8px;">
+            テーマ：<strong>医療関連感染症（バルンカテーテル管理）</strong> と <strong>褥瘡予防対策</strong><br>
             「今回はバルンカテーテル管理と褥瘡（じょくそう）予防について考えてみよう！」
           </div>
-          <div class="type-line" style="margin-top:6px;">
+          <div class="type-line" style="margin-top:8px;">
             「今日の担当患者さんは、<strong>桜陶子さん（88歳）</strong>。<br>
             もともとは自立して一人暮らししてたけど、<br>
             大腿骨頸部骨折で緊急入院して、手術後に整形外科病棟で療養中なんだ。」
@@ -198,13 +219,13 @@
         </div>
       </div>
 
-      <div class="question" style="margin-top:10px;">🔍 なぞ①：バルンの位置、これでいいのかな？</div>
+      <div class="question" style="margin-top:12px;">🔍 なぞ①：バルンの位置、これでいいのかな？</div>
       <div class="lead">術後2日目。まだ痛みが強くてリハビリが進まない陶子さん。<br>バルンカテーテルがついてるけど…どこがまちがってる？</div>
       <div class="choices" id="q1-choices"></div>
       <div id="q1-judge" class="result"></div>
       <div id="q1-explain" class="explain" style="display:none;"></div>
-      <div id="q1-after-img" style="display:none; text-align:center; margin-top:10px;">
-        <img src="barun.png" alt="バルン正しい位置例" style="max-width:280px; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,.12);" />
+      <div id="q1-after-img" style="display:none; text-align:center; margin-top:12px;">
+        <img src="barun.png" alt="バルン正しい位置例" style="max-width:300px; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,.12);" />
       </div>
       <div id="q1-next" style="display:none; margin-top:12px; text-align:center;">
         <button class="btn" onclick="goP4()">次へ</button>
@@ -262,38 +283,43 @@
         <img src="nazotoki2.png" alt="まとめとせいくん" />
         <div class="speech">
           <div class="type-line"><strong>とせいくんのまとめ</strong></div>
-          <div class="type-line" style="margin-top:6px;">
+          <div class="type-line" style="margin-top:8px;">
             ・バルンバッグは<strong>低く、でも床にはつけない！</strong><br>
             ・マットレスは<strong>圧切り替え型</strong>で設定チェック！<br>
             ・ADLは<strong>“今の状態”</strong>で評価！<br>
             ・採尿袋は<strong>空にして逆流防止！</strong><br>
             ・定期的な除圧＆皮膚観察で<strong>褥瘡・MDRPU</strong>を防ごう！
           </div>
-          <div class="type-line" style="margin-top:6px;">
+          <div class="type-line" style="margin-top:8px;">
             「ふぅ〜今日のなぞときもなかなか深かったね！<br>
             小さな“気づき”が患者さんを守る大きな力になるんだよ。<br>
             次のなぞも一緒に解いていこうね♪」
           </div>
         </div>
       </div>
-      <div style="margin-top:14px; text-align:center;">
+      <div style="margin-top:16px; text-align:center;">
         <button class="btn" onclick="goP8()">次へ</button>
       </div>
     </section>
 
-    <!-- 8ページ目：推しチーム投票（改良UI） -->
+    <!-- 8ページ目：推しチーム投票 -->
     <section id="p8-vote" class="card fade" style="display:none;">
       <div class="hero">
         <img src="mame2.png" alt="投票とせいくん" />
-        <div class="speech">
-          <div class="type-line"><strong>推しチームに清き一票を！</strong></div>
-          <div class="type-line" style="margin-top:6px;">タップで選択 → 下の<strong>決定</strong>を押すと送信するよ。</div>
+        <div class="speech warn" role="note" aria-live="polite">
+          <div class="warn-title">⚠️ とせいくんからのお願い</div>
+          <div class="type-line">
+            <strong>１人１回の投票でお願いね。</strong><br>
+            <strong>同じアカウントで何度も投票していると、僕にはわかっちゃう</strong>から、<br>
+            <strong>減点しちゃうよ。</strong><br>
+            正々堂々、清き一票をお願いします！
+          </div>
         </div>
       </div>
 
       <div class="vote-wrap">
         <div id="vote-grid" class="vote-grid" role="radiogroup" aria-label="推しチームを選択"></div>
-        <div class="sticky-actions" style="margin-top:12px;">
+        <div class="sticky-actions" style="margin-top:14px;">
           <button id="vote-submit" class="btn alt" onclick="submitVote()">決定（送信）</button>
         </div>
       </div>
@@ -305,7 +331,7 @@
         <img src="nazotoki2.png" alt="ラスト" style="width:min(60vw,180px);height:auto;border-radius:24px;box-shadow:0 10px 26px rgba(0,0,0,.12);" />
         <div class="speech">
           <div class="type-line"><strong>TMCの紹介</strong></div>
-          <div class="type-line" style="margin-top:6px;">
+          <div class="type-line" style="margin-top:8px;">
             ついに<strong>12月20日 TMC開催</strong>だ！！<br>
             みんなで応援しよう。<br>
             参加者・サポーターのみんなも、<strong>がんばってね！</strong>
@@ -329,15 +355,14 @@
   <audio id="seCorrect" src="pinpon.mp3" preload="auto"></audio>
 
 <script>
-/* ====== Googleフォーム 送信設定（必要なら設定） ====== */
-const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLScG2ytOrT82JTSBKFJ9WfnDVLHZK284CDa34H7F__lwpQOaJw/formResponse";  
+/* ====== Googleフォーム 送信設定（最終ページで1回だけ送る） ====== */
+const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLScG2ytOrT82JTSBKFJ9WfnDVLHZK284CDa34H7F__lwpQOaJw/formResponse";
 
 // 各項目の entry 番号（あなたのフォームに対応）
 const ENTRY_NAME = "entry.671897270";   // 名前
 const ENTRY_DEPT = "entry.278938549";   // 所属
 const ENTRY_JOB  = "entry.691760735";   // 職種
 const ENTRY_VOTE = "entry.1492918324";  // 推しチーム
-
 
 /* ====== DOM参照 ====== */
 const nameEl  = document.getElementById('name');
@@ -378,22 +403,7 @@ function toast(msg){
   const t=document.createElement('div');
   t.className="toast"; t.textContent=msg;
   document.body.appendChild(t);
-  setTimeout(()=>t.remove(), 1800);
-}
-
-/* ====== Googleフォーム送信（プロフィール） ====== */
-function sendProfile(){
-  if(!GOOGLE_FORM_ACTION) return;
-  const params = new URLSearchParams();
-  params.append(ENTRY_NAME, nameEl.value ?? "");
-  params.append(ENTRY_DEPT, groupEl.value ?? "");
-  params.append(ENTRY_JOB,  jobEl.value ?? "");
-  params.append("submit", "Submit");
-  fetch(GOOGLE_FORM_ACTION, {
-    method: "POST", mode: "no-cors",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: params
-  }).catch(()=>{});
+  setTimeout(()=>t.remove(), 2000);
 }
 
 /* ====== チーム配列 ====== */
@@ -442,15 +452,11 @@ function goP2(){
   if(!jobEl.value.trim()){   jobEl.focus();   jobEl.style.borderColor= '#ff8dc7'; return; }
   nameEl.style.borderColor=groupEl.style.borderColor=jobEl.style.borderColor='#ffdff0';
 
-  // ★送信しない（ここでフォームPOSTしない）
-  // sendProfile(); 
-  // toast("プロフィールを送信しました（フォームの回答タブで確認できます）");
-
+  // ★ここでは送信しない（重複カウント防止）
   try{ bgmQuiz.pause(); }catch(e){}
   try{ bgmTeams.volume=0.85; bgmTeams.play(); }catch(e){}
   show(p2);
 }
-
 function goP3(){ try{ bgmTeams.pause(); }catch(e){} try{ bgmQuiz.volume=0.85; bgmQuiz.play(); }catch(e){} show(p3); }
 function goP4(){ show(p4); }
 function goP5(){ show(p5); }
@@ -482,7 +488,7 @@ function playCorrectSE(){
   opts.forEach(o=>{
     const b=document.createElement('button');
     b.className='choice-btn';
-    b.dataset.se='none';              // ★クリックSE抑制
+    b.dataset.se='none';
     b.textContent=o.label;
     b.onclick=()=>{
       const judge = document.getElementById('q1-judge');
@@ -491,7 +497,7 @@ function playCorrectSE(){
       const afterImg = document.getElementById('q1-after-img');
       if(o.correct){
         judge.textContent="正解！"; judge.className="result ok";
-        playCorrectSE();              // ★pinponのみ
+        playCorrectSE();
         showStamp();
         explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>バッグが床についてると汚れちゃって、感染のリスクが上がるんだよ。</li><li>膀胱より低くて、でも床にはつかない位置に固定しようね。</li><li>チューブが柵にかからないようにも注意だよ！</li></ul>";
         explain.style.display="block";
@@ -514,7 +520,7 @@ function playCorrectSE(){
   opts.forEach(o=>{
     const b=document.createElement('button');
     b.className='choice-btn';
-    b.dataset.se='none';              // ★クリックSE抑制
+    b.dataset.se='none';
     b.textContent=o.label;
     b.onclick=()=>{
       const judge = document.getElementById('q2-judge');
@@ -545,7 +551,7 @@ function playCorrectSE(){
   opts.forEach(o=>{
     const b=document.createElement('button');
     b.className='choice-btn';
-    b.dataset.se='none';              // ★クリックSE抑制
+    b.dataset.se='none';
     b.textContent=o.label;
     b.onclick=()=>{
       const judge = document.getElementById('q3-judge');
@@ -576,7 +582,7 @@ function playCorrectSE(){
   opts.forEach(o=>{
     const b=document.createElement('button');
     b.className='choice-btn';
-    b.dataset.se='none';              // ★クリックSE抑制
+    b.dataset.se='none';
     b.textContent=o.label;
     b.onclick=()=>{
       const judge = document.getElementById('q4-judge');
@@ -597,8 +603,7 @@ function playCorrectSE(){
   });
 })();
 
-/* ====== 投票送信（決定のみ） ====== */
-/* 送信の成否に関わらず、必ず最終ページへ遷移 */
+/* ====== 投票送信（ここで初めてフォームに1回だけPOST） ====== */
 function submitVote(){
   const selectedRadio = document.querySelector('input[name="voteTeam"]:checked');
   if(!selectedRadio){ toast("推しチームを選んでね"); return; }
@@ -623,7 +628,7 @@ function submitVote(){
 
   // 成否に関係なく演出→最終ページへ
   toast("投票を送信しました。ありがとう！");
-  setTimeout(()=>{ goP9(); btn.disabled = false; }, 600);
+  setTimeout(()=>{ goP9(); btn.disabled = false; }, 650);
 }
 </script>
 </body>
