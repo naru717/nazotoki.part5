@@ -66,17 +66,21 @@
   }
   input:focus{border-color:var(--focus); box-shadow:0 0 0 4px #ffe6f4;}
 
-  .hero{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; }
+  .hero{
+    display:flex; flex-direction:column; align-items:center; gap:12px;
+    text-align:initial; /* ← テキストは左寄せに */
+  }
   .hero img{ width:min(72vw, 320px); height:auto; border-radius:24px; box-shadow:0 10px 26px rgba(0,0,0,.12); }
 
   .speech{
-    background:#ffffff; border:2px solid #ffd5ec; border-radius:18px; padding:12px 14px; line-height:1.9;
-    position:relative; max-width:720px; text-align:left;
+    background:#ffffff; border:2px solid #ffd5ec; border-radius:18px; padding:12px 14px;
+    line-height:1.9; position:relative; max-width:720px; text-align:left;
   }
   .speech:after{content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:10px solid transparent; border-top-color:#ffd5ec;}
   .speech:before{content:""; position:absolute; top:calc(100% + 2px); left:50%; transform:translateX(-50%); border:10px solid transparent; border-top-color:#ffffff;}
 
-  .type-line{min-height:1.8em; white-space:pre-wrap; line-height:2.0;}
+  /* ★行頭ズレ防止：改行だけ保持、行頭スペースは潰す */
+  .type-line{min-height:1.8em; white-space:pre-line; line-height:2.0;}
   .pause-dot{animation:blink 1.4s ease-in-out infinite;}
   @keyframes blink{0%,100%{opacity:.2} 50%{opacity:1}}
 
@@ -135,6 +139,10 @@
   .warn-title{
     color:var(--warn); font-weight:900; font-size:18px; margin-bottom:6px;
   }
+
+  /* 箇条書きの可読性向上（モバイル） */
+  .muted-box ul{margin:10px 0 0; padding-left:20px;}
+  .explain ul{margin:6px 0 0; padding-left:18px;}
 </style>
 </head>
 <body>
@@ -185,8 +193,8 @@
         <div class="speech">
           <div class="type-line"><strong>今日はキミの推しチームを教えて欲しいんだ。</strong></div>
           <div class="type-line" style="margin-top:8px;">
-            それぞれのチームの<strong>意気込みは第４弾で紹介</strong>しているから、みてみてね。<br>
-            最後に投票があるから、キミの推しチームを選んで投票だ。
+それぞれのチームの<strong>意気込みは第４弾で紹介</strong>しているから、みてみてね。<br>
+最後に投票があるから、キミの推しチームを選んで投票だ。
           </div>
         </div>
       </div>
@@ -208,13 +216,13 @@
         <div class="speech">
           <div class="type-line">まずはTMCにも日常の看護の現場でも役立つ謎解きだ。</div>
           <div class="type-line" style="margin-top:8px;">
-            テーマ：<strong>医療関連感染症（バルンカテーテル管理）</strong> と <strong>褥瘡予防対策</strong><br>
-            「今回はバルンカテーテル管理と褥瘡（じょくそう）予防について考えてみよう！」
+テーマ：<strong>医療関連感染症（バルンカテーテル管理）</strong> と <strong>褥瘡予防対策</strong><br>
+「今回はバルンカテーテル管理と褥瘡（じょくそう）予防について考えてみよう！」
           </div>
           <div class="type-line" style="margin-top:8px;">
-            「今日の担当患者さんは、<strong>桜陶子さん（88歳）</strong>。<br>
-            もともとは自立して一人暮らししてたけど、<br>
-            大腿骨頸部骨折で緊急入院して、手術後に整形外科病棟で療養中なんだ。」
+「今日の担当患者さんは、<strong>桜陶子さん（88歳）</strong>。<br>
+もともとは自立して一人暮らししてたけど、<br>
+大腿骨頸部骨折で緊急入院して、手術後に整形外科病棟で療養中なんだ。」
           </div>
         </div>
       </div>
@@ -284,16 +292,16 @@
         <div class="speech">
           <div class="type-line"><strong>とせいくんのまとめ</strong></div>
           <div class="type-line" style="margin-top:8px;">
-            ・バルンバッグは<strong>低く、でも床にはつけない！</strong><br>
-            ・マットレスは<strong>圧切り替え型</strong>で設定チェック！<br>
-            ・ADLは<strong>“今の状態”</strong>で評価！<br>
-            ・採尿袋は<strong>空にして逆流防止！</strong><br>
-            ・定期的な除圧＆皮膚観察で<strong>褥瘡・MDRPU</strong>を防ごう！
+・バルンバッグは<strong>低く、でも床にはつけない！</strong><br>
+・マットレスは<strong>圧切り替え型</strong>で設定チェック！<br>
+・ADLは<strong>“今の状態”</strong>で評価！<br>
+・採尿袋は<strong>空にして逆流防止！</strong><br>
+・定期的な除圧＆皮膚観察で<strong>褥瘡・MDRPU</strong>を防ごう！
           </div>
           <div class="type-line" style="margin-top:8px;">
-            「ふぅ〜今日のなぞときもなかなか深かったね！<br>
-            小さな“気づき”が患者さんを守る大きな力になるんだよ。<br>
-            次のなぞも一緒に解いていこうね♪」
+「ふぅ〜今日のなぞときもなかなか深かったね！<br>
+小さな“気づき”が患者さんを守る大きな力になるんだよ。<br>
+次のなぞも一緒に解いていこうね♪」
           </div>
         </div>
       </div>
@@ -309,11 +317,11 @@
         <div class="speech warn" role="note" aria-live="polite">
           <div class="warn-title">さあ、お待ちかね、推しチームの投票だ</div>
           <div class="type-line">
-            <strong>キミの推しチームを投票してね。</strong><br>
-             <strong>１人１回の投票でお願いね。</strong><br>
-            <strong>同じアカウントで何度も投票していると、僕にはわかっちゃう</strong>から、<br>
-            <strong>減点しちゃうよ。</strong><br>
-            正々堂々、清き一票をお願いします！
+<strong>キミの推しチームを投票してね。</strong><br>
+<strong>１人１回の投票でお願いね。</strong><br>
+<strong>同じアカウントで何度も投票していると、僕にはわかっちゃう</strong>から、<br>
+<strong>減点しちゃうよ。</strong><br>
+正々堂々、清き一票をお願いします！
           </div>
         </div>
       </div>
@@ -333,9 +341,9 @@
         <div class="speech">
           <div class="type-line"><strong>TMCの紹介</strong></div>
           <div class="type-line" style="margin-top:8px;">
-            ついに<strong>12月20日 TMC開催</strong>だ！！<br>
-            みんなで応援しよう。<br>
-            参加者・サポーターのみんなも、<strong>がんばってね！</strong>
+ついに<strong>12月20日 TMC開催</strong>だ！！<br>
+みんなで応援しよう。<br>
+参加者・サポーターのみんなも、<strong>がんばってね！</strong>
           </div>
         </div>
       </div>
@@ -417,7 +425,11 @@ const teams = [
 (function renderListAndVotes(){
   // 一覧
   const ul = document.getElementById('team-list-view');
-  teams.forEach(t => { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+  teams.forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = t;
+    ul.appendChild(li);
+  });
 
   // 投票
   const grid = document.getElementById('vote-grid');
@@ -500,7 +512,7 @@ function playCorrectSE(){
         judge.textContent="正解！"; judge.className="result ok";
         playCorrectSE();
         showStamp();
-        explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>バッグが床についてると汚れちゃって、感染のリスクが上がるんだよ。</li><li>膀胱より低くて、でも床にはつかない位置に固定しようね。</li><li>チューブが柵にかからないようにも注意だよ！</li></ul>";
+        explain.innerHTML = "<strong>解答</strong><ul><li>バッグが床についてると汚れちゃって、感染のリスクが上がるんだよ。</li><li>膀胱より低くて、でも床にはつかない位置に固定しようね。</li><li>チューブが柵にかからないようにも注意だよ！</li></ul>";
         explain.style.display="block";
         next.style.display="block";
         setTimeout(()=>{ afterImg.style.display="block"; }, 750);
@@ -531,7 +543,7 @@ function playCorrectSE(){
         judge.textContent="正解！"; judge.className="result ok";
         playCorrectSE();
         showStamp();
-        explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>静止型だと除圧が足りなくて、褥瘡のリスクが上がっちゃう。</li><li>基本は<strong>圧切り替え型（交互圧）</strong>を使おう！</li><li>訪室時に“ちゃんと動いてる？”って確認するのも大事！</li></ul>";
+        explain.innerHTML = "<strong>解答</strong><ul><li>静止型だと除圧が足りなくて、褥瘡のリスクが上がっちゃう。</li><li>基本は<strong>圧切り替え型（交互圧）</strong>を使おう！</li><li>訪室時に“ちゃんと動いてる？”って確認するのも大事！</li></ul>";
         explain.style.display="block";
         next.style.display="block";
       }else{
@@ -562,7 +574,7 @@ function playCorrectSE(){
         judge.textContent="正解！"; judge.className="result ok";
         playCorrectSE();
         showStamp();
-        explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>ADLは<strong>“いまの状態”</strong>で評価するんだよ！</li><li>今の陶子さんは介助が必要だから<strong>B2くらい</strong>。</li><li>自力で除圧できないなら、定期的に体位変換や摩擦予防をしよう。</li><li>ストッキング中も赤みやしわのチェック忘れずに！</li></ul>";
+        explain.innerHTML = "<strong>解答</strong><ul><li>ADLは<strong>“いまの状態”</strong>で評価するんだよ！</li><li>今の陶子さんは介助が必要だから<strong>B2くらい</strong>。</li><li>自力で除圧できないなら、定期的に体位変換や摩擦予防をしよう。</li><li>ストッキング中も赤みやしわのチェック忘れずに！</li></ul>";
         explain.style.display="block";
         next.style.display="block";
       }else{
@@ -593,7 +605,7 @@ function playCorrectSE(){
         judge.textContent="正解！"; judge.className="result ok";
         playCorrectSE();
         showStamp();
-        explain.innerHTML = "<strong>解答</strong><ul style='margin:6px 0 0; padding-left:18px;'><li>採尿袋を膝に置くと膀胱より高くなって<strong>逆流の危険！</strong></li><li>移乗前に中身を空にして、膀胱より低い位置でキープしよう。</li><li>クッションと除圧で褥瘡も予防できるよ！</li></ul>";
+        explain.innerHTML = "<strong>解答</strong><ul><li>採尿袋を膝に置くと膀胱より高くなって<strong>逆流の危険！</strong></li><li>移乗前に中身を空にして、膀胱より低い位置でキープしよう。</li><li>クッションと除圧で褥瘡も予防できるよ！</li></ul>";
         explain.style.display="block";
         next.style.display="block";
       }else{
@@ -634,3 +646,4 @@ function submitVote(){
 </script>
 </body>
 </html>
+
