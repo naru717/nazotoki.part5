@@ -441,13 +441,16 @@ function goP2(){
   if(!groupEl.value.trim()){ groupEl.focus(); groupEl.style.borderColor='#ff8dc7'; return; }
   if(!jobEl.value.trim()){   jobEl.focus();   jobEl.style.borderColor= '#ff8dc7'; return; }
   nameEl.style.borderColor=groupEl.style.borderColor=jobEl.style.borderColor='#ffdff0';
-  sendProfile(); // 必要に応じてフォーム側で確認
-  toast("プロフィールを送信しました（フォームの回答タブで確認できます）");
+
+  // ★送信しない（ここでフォームPOSTしない）
+  // sendProfile(); 
+  // toast("プロフィールを送信しました（フォームの回答タブで確認できます）");
 
   try{ bgmQuiz.pause(); }catch(e){}
   try{ bgmTeams.volume=0.85; bgmTeams.play(); }catch(e){}
   show(p2);
 }
+
 function goP3(){ try{ bgmTeams.pause(); }catch(e){} try{ bgmQuiz.volume=0.85; bgmQuiz.play(); }catch(e){} show(p3); }
 function goP4(){ show(p4); }
 function goP5(){ show(p5); }
